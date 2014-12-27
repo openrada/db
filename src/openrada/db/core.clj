@@ -15,6 +15,19 @@
       :generated_keys
       (first)))
 
+(defn get-first [resp]
+  (->
+   (:response resp)
+   (first)))
+
+(defn my-db-table [tablename]
+  (-> (r/db "rada")
+      (r/table-db tablename)))
+
+
+
+
+(def memberst (my-db-table "members"))
 
 ;(-> (r/db-create "rada") (run conn))
 
@@ -37,51 +50,45 @@
 ;                      (r/get-field deputy :rada))))
 
 (defn save-members [members]
-  (-> (r/db "rada")
-      (r/table-db "members")
+  (-> memberst
       (r/insert (vec members))
-      (run (connect))))
+      (run conn)))
 
 
 (defn update-member [id new-data]
-  (-> (r/db "rada")
-      (r/table-db "members")
+  (-> memberst
       (r/get id)
       (r/update new-data)
-      (run (connect))))
+      (run conn)))
 
 ;(update-deputy "027fa5df-cbd4-4138-8b7b-77078d2e7f28" {:rada 7})
 
 
 
 (defn get-members-from-convocation [convocation]
-  (-> (r/db "rada")
-      (r/table-db "members")
+  (-> memberst
       (r/get-all [convocation] :convocation)
-      (run (connect))
+      (run conn)
       :response))
 
 
+;(get-members-from-convocation 8)
 
 
 (defn get-member [id]
-  (-> (r/db "rada")
-      (r/table-db "members")
+  (->  memberst
       (r/get id)
-      (run (connect))
-      :response
-      (first)))
+      (run conn)
+      (get-first)))
 
 
-(get-member "01b1c176-c26a-4388-b2e9-acc79afb5c90")
+;(get-member "01b1c176-c26a-4388-b2e9-acc79afb5c90")
 
 
 (defn get-member-by-short-name [short-name]
-  (-> (r/db "rada")
-      (r/table-db "members")
+  (-> memberst
       (r/filter (r/lambda [row]
                 (r/= (r/get-field row :short_name) short-name)))
       (run conn)
-      :response
-      (first)))
+      (get-first)))
 
