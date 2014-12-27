@@ -5,6 +5,6 @@
             :url "http://www.eclipse.org/legal/epl-v10.html"}
   :min-lein-version "2.0.0"
   :dependencies [[org.clojure/clojure "1.6.0"]
-                 [camel-snake-kebab "0.2.4"]
+                 [camel-snake-kebab "0.2.5"]
                  [revise "0.0.6"]]
   :target-path "target/%s")
