@@ -6,5 +6,5 @@
   :min-lein-version "2.0.0"
   :dependencies [[org.clojure/clojure "1.6.0"]
                  [camel-snake-kebab "0.2.5"]
-                 [revise "0.0.6"]]
+                 [rethinkdb "0.3.29"]]
   :target-path "target/%s")

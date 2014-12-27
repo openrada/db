@@ -1,12 +1,11 @@
 (ns openrada.db.core
   (:require [camel-snake-kebab.core :refer :all]
-            [bitemyapp.revise.connection :refer [connect close]]
-            [bitemyapp.revise.query :as r]
-            [bitemyapp.revise.core :refer [run run-async]]))
+            [rethinkdb.core :refer [connect close]]
+            [rethinkdb.query :as r]))
 
 
 
-(def conn (connect))
+(def conn (connect :host "127.0.0.1" :port 28015))
 
 
 (defn inserted-id [resp]
@@ -22,7 +21,7 @@
 
 (defn my-db-table [tablename]
   (-> (r/db "rada")
-      (r/table-db tablename)))
+      (r/table tablename)))
 
 
 
@@ -52,14 +51,15 @@
 (defn save-members [members]
   (-> memberst
       (r/insert (vec members))
-      (run conn)))
+      (r/run conn)))
+
 
 
 (defn update-member [id new-data]
   (-> memberst
       (r/get id)
       (r/update new-data)
-      (run conn)))
+      (r/run conn)))
 
 ;(update-deputy "027fa5df-cbd4-4138-8b7b-77078d2e7f28" {:rada 7})
 
@@ -67,9 +67,8 @@
 
 (defn get-members-from-convocation [convocation]
   (-> memberst
-      (r/get-all [convocation] :convocation)
-      (run conn)
-      :response))
+      (r/get-all [convocation] {:index "convocation"})
+      (r/run conn)))
 
 
 ;(get-members-from-convocation 8)
@@ -78,17 +77,15 @@
 (defn get-member [id]
   (->  memberst
       (r/get id)
-      (run conn)
-      (get-first)))
+      (r/run conn)))
 
 
-;(get-member "01b1c176-c26a-4388-b2e9-acc79afb5c90")
+;(get-member "c04517b8-39b4-4814-ab2b-89bb1b85e39f")
 
 
 (defn get-member-by-short-name [short-name]
   (-> memberst
       (r/filter (r/lambda [row]
                 (r/= (r/get-field row :short_name) short-name)))
-      (run conn)
-      (get-first)))
+      (r/run conn)))
 
