@@ -85,7 +85,7 @@
 
 (defn get-member-by-short-name [short-name]
   (-> memberst
-      (r/filter (r/lambda [row]
-                (r/= (r/get-field row :short_name) short-name)))
+      (r/filter (r/fn [row]
+                (r/eq (r/get-field row :short_name) short-name)))
       (r/run conn)))
 
