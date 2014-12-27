@@ -1,5 +1,5 @@
 (defproject openrada.db "0.1.0-SNAPSHOT"
-  :description "DB component"
+  :description "Openrada DB component"
   :url "https://github.com/openrada/db"
   :license {:name "Eclipse Public License"
             :url "http://www.eclipse.org/legal/epl-v10.html"}

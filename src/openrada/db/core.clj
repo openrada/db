@@ -1,4 +1,4 @@
-(ns openrada.db
+(ns openrada.db.core
   (:require [camel-snake-kebab.core :refer :all]
             [bitemyapp.revise.connection :refer [connect close]]
             [bitemyapp.revise.query :as r]
@@ -15,7 +15,6 @@
       :generated_keys
       (first)))
 
-;  (first (:generated_keys (first (:response resp)))))
 
 ;(-> (r/db-create "rada") (run conn))
 
