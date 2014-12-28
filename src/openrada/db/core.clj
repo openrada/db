@@ -8,16 +8,6 @@
 (def conn (connect :host "127.0.0.1" :port 28015))
 
 
-(defn inserted-id [resp]
-  (-> (:response resp)
-      (first)
-      :generated_keys
-      (first)))
-
-(defn get-first [resp]
-  (->
-   (:response resp)
-   (first)))
 
 (defn my-db-table [tablename]
   (-> (r/db "rada")
@@ -61,13 +51,14 @@
       (r/update new-data)
       (r/run conn)))
 
-;(update-deputy "027fa5df-cbd4-4138-8b7b-77078d2e7f28" {:rada 7})
+;(update-member "048a84fc-1a58-45d6-9077-78e04af24447" {:convocation  7})
 
 
 
 (defn get-members-from-convocation [convocation]
   (-> memberst
       (r/get-all [convocation] {:index "convocation"})
+      (r/without [:image])
       (r/run conn)))
 
 
