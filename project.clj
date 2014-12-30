@@ -1,4 +1,4 @@
-(defproject openrada.db "0.1.0-SNAPSHOT"
+(defproject openrada/db "0.1.0-SNAPSHOT"
   :description "Openrada DB component"
   :url "https://github.com/openrada/db"
   :license {:name "Eclipse Public License"
