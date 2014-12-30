@@ -1,14 +1,14 @@
 (ns openrada.db.core
-  (:require [camel-snake-kebab.core :refer :all]
-            [rethinkdb.core :refer [connect close]]
+  (:require [rethinkdb.core :refer [connect close]]
             [rethinkdb.query :as r]
             [environ.core :refer [env]]))
 
 
+(println "ENVS" (read-string (env :rethinkdb-port)) (env :rethinkdb-host))
 
 (def conn (connect
            :host (env :rethinkdb-host)
-           :port (env :rethinkdb-port)))
+           :port (read-string (env :rethinkdb-port))))
 
 
 
