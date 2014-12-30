@@ -1,11 +1,14 @@
 (ns openrada.db.core
   (:require [camel-snake-kebab.core :refer :all]
             [rethinkdb.core :refer [connect close]]
-            [rethinkdb.query :as r]))
+            [rethinkdb.query :as r]
+            [environ.core :refer [env]]))
 
 
 
-(def conn (connect :host "127.0.0.1" :port 28015))
+(def conn (connect
+           :host (env :rethinkdb-host)
+           :port (env :rethinkdb-port)))
 
 
 
@@ -14,29 +17,8 @@
       (r/table tablename)))
 
 
-
-
 (def memberst (my-db-table "members"))
 
-;(-> (r/db-create "rada") (run conn))
-
-;(-> (r/db "rada") (r/table-create-db "members") (run conn))
-
-;(-> (r/db "rada") (r/table-db "members")
-;    (r/index-create :short_name
-;                    (r/lambda [deputy]
-;                      (r/get-field deputy :short_name))))
-
-; (-> (r/db "rada") (r/table-create-db "votes") (run conn))
-; (-> (r/db "rada") (r/table-create-db "bills") (run conn))
-
-
-
-;(-> (r/db "rada")
-;    (r/table-db "members")
-;    (r/index-create :rada
-;                    (r/lambda [deputy]
-;                      (r/get-field deputy :rada))))
 
 (defn save-members [members]
   (-> memberst
