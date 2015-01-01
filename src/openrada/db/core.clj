@@ -1,14 +1,11 @@
 (ns openrada.db.core
   (:require [rethinkdb.core :refer [connect close]]
-            [rethinkdb.query :as r]
-            [environ.core :refer [env]]))
+            [rethinkdb.query :as r]))
 
 
-(println "ENVS" (read-string (env :rethinkdb-port)) (env :rethinkdb-host))
-
-(def conn (connect
-           :host (env :rethinkdb-host)
-           :port (read-string (env :rethinkdb-port))))
+; conf should have :host and :port keys
+(defn make-connection [conf]
+  (connect conf))
 
 
 
@@ -20,14 +17,14 @@
 (def memberst (my-db-table "members"))
 
 
-(defn save-members [members]
+(defn save-members [conn members]
   (-> memberst
       (r/insert (vec members))
       (r/run conn)))
 
 
 
-(defn update-member [id new-data]
+(defn update-member [conn id new-data]
   (-> memberst
       (r/get id)
       (r/update new-data)
@@ -37,7 +34,7 @@
 
 
 
-(defn get-members-from-convocation [convocation]
+(defn get-members-from-convocation [conn convocation]
   (-> memberst
       (r/get-all [convocation] {:index "convocation"})
       (r/without [:image])
@@ -47,7 +44,7 @@
 ;(get-members-from-convocation 8)
 
 
-(defn get-member [id]
+(defn get-member [conn id]
   (->  memberst
       (r/get id)
       (r/run conn)))
@@ -56,7 +53,7 @@
 ;(get-member "c04517b8-39b4-4814-ab2b-89bb1b85e39f")
 
 
-(defn get-member-by-short-name [short-name]
+(defn get-member-by-short-name [conn short-name]
   (-> memberst
       (r/filter (r/fn [row]
                 (r/eq (r/get-field row :short_name) short-name)))
