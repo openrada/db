@@ -5,8 +5,7 @@
 
 ; conf should have :host and :port keys
 (defn make-connection [conf]
-  (connect (:host conf) (:port conf)))
-
+  (connect :host (:host conf)))
 
 
 (defn my-db-table [tablename]
