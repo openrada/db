@@ -2,10 +2,11 @@
   (:require [rethinkdb.core :refer [connect close]]
             [rethinkdb.query :as r]))
 
+(defn make-connection [host]
+  (connect :host host))
 
-; conf should have :host and :port keys
-(defn make-connection [conf]
-  (connect :host (:host conf)))
+(defn close-connection [db]
+  (close (:connection db)))
 
 
 (defn my-db-table [tablename]
@@ -16,44 +17,38 @@
 (def memberst (my-db-table "members"))
 
 
-(defn save-members [conn members]
+(defn save-members [db members]
   (-> memberst
       (r/insert (vec members))
-      (r/run conn)))
+      (r/run (:connection db))))
 
 
 
-(defn update-member [conn id new-data]
+(defn update-member [db id new-data]
   (-> memberst
       (r/get id)
       (r/update new-data)
-      (r/run conn)))
-
-;(update-member "048a84fc-1a58-45d6-9077-78e04af24447" {:convocation  7})
+      (r/run (:connection db))))
 
 
-
-(defn get-members-from-convocation [conn convocation]
+(defn get-members-from-convocation [db convocation]
   (-> memberst
       (r/get-all [convocation] {:index "convocation"})
       (r/without [:image])
-      (r/run conn)))
+      (r/run (:connection db))))
 
 
-;(get-members-from-convocation 8)
-
-
-(defn get-member [conn id]
+(defn get-member [db id]
   (->  memberst
       (r/get id)
-      (r/run conn)))
+      (r/run (:connection db))))
 
 
 
 
-(defn get-member-by-short-name [conn short-name]
+(defn get-member-by-short-name [db short-name]
   (-> memberst
       (r/filter (r/fn [row]
                 (r/eq (r/get-field row :short_name) short-name)))
-      (r/run conn)))
+      (r/run (:connection db))))
 
