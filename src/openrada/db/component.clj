@@ -18,7 +18,7 @@
     ((db/close-connection connection)
     ;; Return the component, optionally modified. Remember that if you
     ;; dissoc one of a record's base fields, you get a plain map.
-    (assoc component :connection nil)))
+    (assoc component :connection nil))))
 
 
 (defn new-database
