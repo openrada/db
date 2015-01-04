@@ -49,7 +49,6 @@
       (r/run conn)))
 
 
-;(get-member "c04517b8-39b4-4814-ab2b-89bb1b85e39f")
 
 
 (defn get-member-by-short-name [conn short-name]

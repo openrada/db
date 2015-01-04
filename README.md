@@ -4,6 +4,16 @@ db
 
 DB component
 
+## Indexes
+
+members.convocation
+members.short_name
+members.dob
+members.faction
+members.party
+members.district
+
+
 
 ## License
 
