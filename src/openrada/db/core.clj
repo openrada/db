@@ -43,8 +43,17 @@
   (-> memberst
       (r/get-all [convocation] {:index "convocation"})
       (r/without [:image])
+      (r/eq-join "committee_id" committeest)
+      ;(r/map (r/fn [row]
+      ;             (r/merge row {:right {
+      ;                                   :committee_name (r/get-field row "right" "full_name")}})
+      ;             ))
+      (r/zip)
       (r/run (:connection db))))
 
+;(def db {:connection (make-connection "127.0.01")})
+
+;(get-members-from-convocation db 8)
 
 (defn get-member [db id]
   (->  memberst
