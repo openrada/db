@@ -16,6 +16,8 @@
 
 (def memberst (my-db-table "members"))
 
+(def committeest (my-db-table "committees"))
+
 
 (defn save-members [db members]
   (-> memberst
@@ -52,3 +54,17 @@
                 (r/eq (r/get-field row :short_name) short-name)))
       (r/run (:connection db))))
 
+(defn get-member-by-full-name [db full-name]
+  (-> memberst
+      (r/filter (r/fn [row]
+                (r/eq (r/get-field row :full_name) short-name)))
+      (r/run (:connection db))))
+
+
+; committees
+
+
+(defn save-committees [db committees]
+  (-> committeest
+      (r/insert (vec committees))
+      (r/run (:connection db))))

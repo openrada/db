@@ -8,10 +8,14 @@ DB component
 
 members.convocation
 members.short_name
+members.full_name
 members.dob
 members.faction
 members.party
 members.district
+members.committee_id
+
+committees
 
 
 
