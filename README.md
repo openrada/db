@@ -15,7 +15,7 @@ members.party
 members.district
 members.committee_id
 
-committees
+committees.convocation
 
 
 

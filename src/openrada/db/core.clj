@@ -54,10 +54,11 @@
                 (r/eq (r/get-field row :short_name) short-name)))
       (r/run (:connection db))))
 
-(defn get-member-by-full-name [db full-name]
+(defn update-member-by-full-name [db full-name new-data]
   (-> memberst
       (r/filter (r/fn [row]
-                (r/eq (r/get-field row :full_name) short-name)))
+                (r/eq (r/get-field row :full_name) full-name)))
+      (r/update new-data)
       (r/run (:connection db))))
 
 
@@ -67,4 +68,10 @@
 (defn save-committees [db committees]
   (-> committeest
       (r/insert (vec committees))
+      (r/run (:connection db))))
+
+
+(defn get-committees-from-convocation [db convocation]
+  (-> committeest
+      (r/get-all [convocation] {:index "convocation"})
       (r/run (:connection db))))
