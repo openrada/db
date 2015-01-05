@@ -18,6 +18,12 @@
 
 (def committeest (my-db-table "committees"))
 
+(defn remove-field [db tablename field]
+  (-> (my-db-table tablename)
+      (r/replace (r/fn [row]
+                       (r/without row [field])))
+      (r/run (:connection db))))
+
 
 (defn save-members [db members]
   (-> memberst
@@ -75,3 +81,5 @@
   (-> committeest
       (r/get-all [convocation] {:index "convocation"})
       (r/run (:connection db))))
+
+
