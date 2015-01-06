@@ -2,6 +2,10 @@
   (:require [rethinkdb.core :refer [connect close]]
             [rethinkdb.query :as r]))
 
+(defn find-first
+  [f coll]
+  (first (filter f coll)))
+
 (defn make-connection [host]
   (connect :host host))
 
@@ -52,15 +56,11 @@
       (r/zip)
       (r/run (:connection db))))
 
-;(def db {:connection (make-connection "127.0.01")})
-
-;(get-members-from-convocation db 8)
 
 (defn get-member [db id]
   (->  memberst
       (r/get id)
       (r/run (:connection db))))
-
 
 
 
@@ -104,3 +104,34 @@
   (-> factionst
       (r/get-all [convocation] {:index "convocation"})
       (r/run (:connection db))))
+
+
+;; compount queries
+
+
+(defn get-members-full [db convocation]
+  (let [members (get-members-from-convocation db convocation)
+        factions (get-factions-from-convocation db convocation)
+        committees (get-committees-from-convocation db convocation)]
+      (map (fn [member]
+             (let [faction (find-first #(= (:id %) (:faction_id member)) factions)
+                   f (assoc faction :role (:faction_role member))
+                   committee (find-first #(= (:id %) (:committee_id member)) committees)
+                   c (assoc committee :role (:committee_role member))
+                   m (dissoc member :faction_id
+                                    :faction_role
+                                    :committee_id
+                                    :committee_role)]
+               (assoc m :faction (dissoc f :convocation)
+                        :committee (dissoc c :convocation))
+
+               )
+
+             ) members)
+
+    )
+  )
+
+;(def db {:connection (make-connection "127.0.01")})
+
+;(get-members-full db 8)
