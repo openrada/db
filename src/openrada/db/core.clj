@@ -80,7 +80,6 @@
 
 ; committees
 
-
 (defn save-committees [db committees]
   (-> committeest
       (r/insert (vec committees))
