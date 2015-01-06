@@ -18,12 +18,15 @@
 
 (def committeest (my-db-table "committees"))
 
+(def factionst (my-db-table "factions"))
+
 (defn remove-field [db tablename field]
   (-> (my-db-table tablename)
       (r/replace (r/fn [row]
                        (r/without row [field])))
       (r/run (:connection db))))
 
+; members
 
 (defn save-members [db members]
   (-> memberst
@@ -44,10 +47,8 @@
       (r/get-all [convocation] {:index "convocation"})
       (r/without [:image])
       (r/eq-join "committee_id" committeest)
-      ;(r/map (r/fn [row]
-      ;             (r/merge row {:right {
-      ;                                   :committee_name (r/get-field row "right" "full_name")}})
-      ;             ))
+      (r/zip)
+      (r/eq-join "faction_id" factionst)
       (r/zip)
       (r/run (:connection db))))
 
@@ -92,3 +93,15 @@
       (r/run (:connection db))))
 
 
+; factions
+
+(defn save-factions [db factions]
+  (-> factionst
+      (r/insert (vec factions))
+      (r/run (:connection db))))
+
+
+(defn get-factions-from-convocation [db factions]
+  (-> factionst
+      (r/get-all [convocation] {:index "convocation"})
+      (r/run (:connection db))))
