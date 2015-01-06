@@ -101,7 +101,7 @@
       (r/run (:connection db))))
 
 
-(defn get-factions-from-convocation [db factions]
+(defn get-factions-from-convocation [db convocation]
   (-> factionst
       (r/get-all [convocation] {:index "convocation"})
       (r/run (:connection db))))
