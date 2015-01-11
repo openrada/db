@@ -14,6 +14,17 @@
   [f coll]
   (first (filter f coll)))
 
+
+(defn ?assoc
+  "Same as assoc, but skip the assoc if v is nil"
+  [m & kvs]
+  (->> kvs
+    (partition 2)
+    (filter second)
+    flatten
+    (apply assoc m)))
+
+
 (defn make-connection [host]
   (connect :host host))
 
@@ -121,14 +132,18 @@
                  :committee_role))
 
 
+
 (defn enhance-member [member factions committees]
   (let [faction (find-first #(= (:id %) (:faction_id member)) factions)
-        f (assoc faction :role (:faction_role member))
         committee (find-first #(= (:id %) (:committee_id member)) committees)
+        m (pure-member member)
+        f (assoc faction :role (:faction_role member))
         c (assoc committee :role (:committee_role member))
-        m (pure-member member)]
-    (assoc m :faction (dissoc f :convocation)
-            :committee (dissoc c :convocation))))
+        f-clean (dissoc f :convocation)
+        c-clean (dissoc c :convocation)
+       ]
+    (assoc m :faction (if (:id faction) f-clean nil)
+             :committee (if (:id committee) c-clean nil))))
 
 (defn get-members-full
   ([db convocation]
