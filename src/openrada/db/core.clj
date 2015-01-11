@@ -15,16 +15,6 @@
   (first (filter f coll)))
 
 
-(defn ?assoc
-  "Same as assoc, but skip the assoc if v is nil"
-  [m & kvs]
-  (->> kvs
-    (partition 2)
-    (filter second)
-    flatten
-    (apply assoc m)))
-
-
 (defn make-connection [host]
   (connect :host host))
 
@@ -52,6 +42,7 @@
 (defn get-by-id [db tablename id]
   (-> (my-db-table tablename)
       (r/get id)
+      (r/without [:image])
       (r/run (:connection db))))
 
 ; members
@@ -129,8 +120,8 @@
   (dissoc member :faction_id
                  :faction_role
                  :committee_id
-                 :committee_role))
-
+                 :committee_role
+                 :image))
 
 
 (defn enhance-member [member factions committees]
@@ -140,8 +131,7 @@
         f (assoc faction :role (:faction_role member))
         c (assoc committee :role (:committee_role member))
         f-clean (dissoc f :convocation)
-        c-clean (dissoc c :convocation)
-       ]
+        c-clean (dissoc c :convocation)]
     (assoc m :faction (if (:id faction) f-clean nil)
              :committee (if (:id committee) c-clean nil))))
 
