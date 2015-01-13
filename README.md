@@ -19,6 +19,7 @@ committees.convocation
 factions.convocation
 
 registrations.type
+registrations.reg_type
 registrations.member_id
 
 
