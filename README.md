@@ -18,6 +18,9 @@ members.committee_id
 committees.convocation
 factions.convocation
 
+registrations.type
+registrations.member_id
+
 
 
 ## License
