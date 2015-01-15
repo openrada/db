@@ -114,6 +114,19 @@
       (r/run (:connection db))
       (add-urls-to-all "factions" convocation)))
 
+; registrations
+
+(defn save-registrations [db registrations]
+  (-> registrationst
+      (r/insert (vec factions))
+      (r/run (:connection db))))
+
+
+(defn get-registrations-for-member [db member-id]
+  (-> registrationst
+      (r/get-all [member-id] {:index "member_id"})
+      (r/run (:connection db))))
+
 
 ;; compount queries
 
@@ -123,7 +136,9 @@
                  :faction_role
                  :committee_id
                  :committee_role
-                 :image))
+                 :image
+                 :online_registrations_link
+                 :offline_registrations_link))
 
 
 (defn enhance-member [member factions committees]
