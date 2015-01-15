@@ -118,7 +118,7 @@
 
 (defn save-registrations [db registrations]
   (-> registrationst
-      (r/insert (vec factions))
+      (r/insert (vec registrations))
       (r/run (:connection db))))
 
 
