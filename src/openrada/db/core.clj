@@ -33,7 +33,7 @@
 
 (def factionst (my-db-table "factions"))
 
-(def registrations (my-db-table "registrations"))
+(def registrationst (my-db-table "registrations"))
 
 (defn remove-field [db tablename field]
   (-> (my-db-table tablename)
