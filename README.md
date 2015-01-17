@@ -22,6 +22,10 @@ registrations.type
 registrations.reg_type
 registrations.member_id
 
+speeches.type
+speeches.member_id
+
+
 
 
 ## License

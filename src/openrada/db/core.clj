@@ -26,7 +26,7 @@
   (-> (r/db "rada")
       (r/table tablename)))
 
-
+;; def table names
 (def memberst (my-db-table "members"))
 
 (def committeest (my-db-table "committees"))
@@ -34,6 +34,9 @@
 (def factionst (my-db-table "factions"))
 
 (def registrationst (my-db-table "registrations"))
+
+(def speechest (my-db-table "speeches"))
+
 
 (defn remove-field [db tablename field]
   (-> (my-db-table tablename)
@@ -127,6 +130,18 @@
       (r/get-all [member-id] {:index "member_id"})
       (r/run (:connection db))))
 
+; speeches
+
+(defn save-speeches [db speeches]
+  (-> speechest
+      (r/insert (vec speeches))
+      (r/run (:connection db))))
+
+
+(defn get-speeches-for-member [db member-id]
+  (-> speechest
+      (r/get-all [member-id] {:index "member_id"})
+      (r/run (:connection db))))
 
 ;; compount queries
 
